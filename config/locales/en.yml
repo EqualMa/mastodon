@@ -717,6 +717,11 @@ en:
       unreviewed: Not reviewed
       updated_msg: Hashtag settings updated successfully
     title: Administration
+    trends:
+      links:
+        title: Trending links
+      preview_card_providers:
+        title: Publishers
     warning_presets:
       add_new: Add new
       delete: Delete
@@ -731,9 +736,12 @@ en:
       body: "%{reporter} has reported %{target}"
       body_remote: Someone from %{domain} has reported %{target}
       subject: New report for %{instance} (#%{id})
-    new_trending_tag:
-      body: 'The hashtag #%{name} is trending today, but has not been previously reviewed. It will not be displayed publicly unless you allow it to, or just save the form as it is to never hear about it again.'
-      subject: New hashtag up for review on %{instance} (#%{name})
+    new_trending_links:
+      body: The following links are trending today, but their publishers have not been previously reviewed. They will not be displayed publicly unless you approve them. Further notifications from the same publishers will not be generated.
+      subject: New trending links up for review on %{instance}
+    new_trending_tags:
+      body: 'The following hashtags are trending today, but they have not been previously reviewed. They will not be displayed publicly unless you approve them:'
+      subject: New trending hashtags up for review on %{instance}
   aliases:
     add_new: Create alias
     created_msg: Successfully created a new alias. You can now initiate the move from the old account.

@@ -1,0 +1,14 @@
+- content_for :page_title do
+  = t('admin.trends.links.title')
+
+.batch-table
+  .batch-table__toolbar
+    %label.batch-table__toolbar__select.batch-checkbox-all
+      = check_box_tag :batch_checkbox_all, nil, false
+    .batch-table__toolbar__actions
+  .batch-table__body
+    - if @preview_cards.empty?
+      = nothing_here 'nothing-here--under-tabs'
+    - else
+      = render partial: 'preview_card', collection: @preview_cards
+

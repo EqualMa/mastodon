@@ -54,6 +54,20 @@ class PreviewCard < ApplicationRecord
 
   before_save :extract_dimensions, if: :link?
 
+  def appropriate_for_trends?
+    link? && title.present? && description.present? && image.present? && provider_name.present?
+  end
+
+  def domain
+    @domain ||= Addressable::URI.parse(url).normalized_host
+  end
+
+  def provider
+    @provider ||= PreviewCardProvider.matching_domain(domain)
+  end
+
+  attr_writer :provider
+
   def local?
     false
   end
@@ -69,11 +83,14 @@ class PreviewCard < ApplicationRecord
     save!
   end
 
+  def history
+    @history ||= Trends::History.new('links', id)
+  end
+
   class << self
     private
 
-    # rubocop:disable Naming/MethodParameterName
-    def image_styles(f)
+    def image_styles(file)
       styles = {
         original: {
           geometry: '400x400>',
@@ -83,10 +100,9 @@ class PreviewCard < ApplicationRecord
         },
       }
 
-      styles[:original][:format] = 'jpg' if f.instance.image_content_type == 'image/gif'
+      styles[:original][:format] = 'jpg' if file.instance.image_content_type == 'image/gif'
       styles
     end
-    # rubocop:enable Naming/MethodParameterName
   end
 
   private

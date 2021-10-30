@@ -1,11 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe TrendingTags do
-  describe '.record_use!' do
+RSpec.describe Trends::Tags do
+  subject { described_class.new }
+
+  describe '#add' do
     pending
   end
 
-  describe '.update!' do
+  describe '#get' do
+    pending
+  end
+
+  describe '#calculate' do
     let!(:at_time) { Time.now.utc }
     let!(:tag1) { Fabricate(:tag, name: 'Catstodon', trendable: true) }
     let!(:tag2) { Fabricate(:tag, name: 'DogsOfMastodon', trendable: true) }
@@ -27,42 +33,24 @@ RSpec.describe TrendingTags do
         end
       end
 
-      Redis.current.zadd('trending_tags', 0.9, tag3.id)
+      Redis.current.zadd('trending_tags:all', 0.9, tag3.id)
       Redis.current.sadd("trending_tags:used:#{at_time.beginning_of_day.to_i}", [tag1.id, tag2.id])
 
       tag3.update(max_score: 0.9, max_score_at: (at_time - 1.day).beginning_of_day + 12.hours)
 
-      described_class.update!(at_time)
+      subject.calculate(at_time)
     end
 
     it 'calculates and re-calculates scores' do
-      expect(described_class.get(10, filtered: false)).to eq [tag1, tag3]
+      expect(subject.get(false, 10)).to eq [tag1, tag3]
     end
 
     it 'omits hashtags below threshold' do
-      expect(described_class.get(10, filtered: false)).to_not include(tag2)
+      expect(subject.get(false, 10)).to_not include(tag2)
     end
 
     it 'decays scores' do
-      expect(Redis.current.zscore('trending_tags', tag3.id)).to be < 0.9
-    end
-  end
-
-  describe '.trending?' do
-    let(:tag) { Fabricate(:tag) }
-
-    before do
-      10.times { |i| Redis.current.zadd('trending_tags', i + 1, Fabricate(:tag).id) }
-    end
-
-    it 'returns true if the hashtag is within limit' do
-      Redis.current.zadd('trending_tags', 11, tag.id)
-      expect(described_class.trending?(tag)).to be true
-    end
-
-    it 'returns false if the hashtag is outside the limit' do
-      Redis.current.zadd('trending_tags', 0, tag.id)
-      expect(described_class.trending?(tag)).to be false
+      expect(Redis.current.zscore('trending_tags:all', tag3.id)).to be < 0.9
     end
   end
 end

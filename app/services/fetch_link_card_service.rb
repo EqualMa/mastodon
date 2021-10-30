@@ -66,6 +66,7 @@ class FetchLinkCardService < BaseService
   def attach_card
     @status.preview_cards << @card
     Rails.cache.delete(@status)
+    Trends.links.register(@status)
   end
 
   def parse_urls

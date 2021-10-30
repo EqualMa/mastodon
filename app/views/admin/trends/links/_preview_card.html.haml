@@ -1,0 +1,15 @@
+.batch-table__row
+  %label.batch-table__row__select.batch-table__row__select--aligned.batch-checkbox
+    //
+  .batch-table__row__content
+    .batch-table__row__content__text
+      = link_to preview_card.url do
+        = preview_card.title
+        %br/
+        preview_card.url
+      %br/
+      - if preview_card.provider&.trendable?
+        = "Trending ##{Redis.current.zrevrank('trending_links:allowed', preview_card.id)}"
+      - else
+        Requires approval
+      = "Shared by #{preview_card.history.reduce(0) { |sum, day| sum + day.accounts }} people over the last week"

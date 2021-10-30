@@ -64,7 +64,7 @@ module Admin
     end
 
     def set_counters
-      @accounts_today = @tag.history.first[:accounts]
+      @accounts_today = @tag.history.first.accounts
       @accounts_week  = Redis.current.pfcount(*current_week_days.map { |day| "activity:tags:#{@tag.id}:#{day}:accounts" })
     end
 

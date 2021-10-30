@@ -10,10 +10,10 @@
         = tag.name
 
         %small
-          = t('admin.tags.unique_uses_today', count: tag.history.first[:accounts])
+          = t('admin.tags.unique_uses_today', count: tag.history.first.accounts)
 
           - if tag.trending?
             = fa_icon 'fire fw'
             = t('admin.tags.trending_right_now')
 
-      .trends__item__current= friendly_number_to_human tag.history.first[:uses]
+      .trends__item__current= friendly_number_to_human tag.history.first.uses
