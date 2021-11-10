@@ -108,7 +108,16 @@ services:
 #    networks:
 #      - external_network
 #      - internal_network
-
+  nginx-mastodon:
+    image: nginx
+    networks:
+     - external_network
+     - internal_network
+    volumes:
+      - ./public:/home/mastodon/live/public:ro
+      - ./dist/nginx-docker.conf:/etc/nginx/conf.d/default.conf:ro
+    expose:
+      - "80"
 networks:
   external_network:
   internal_network:
