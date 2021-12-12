@@ -5,6 +5,7 @@ host     = ENV.fetch('LOCAL_DOMAIN') { "localhost:#{port}" }
 web_host = ENV.fetch('WEB_DOMAIN') { host }
 
 alternate_domains = ENV.fetch('ALTERNATE_DOMAINS') { '' }.split(/\s*,\s*/)
+additional_connect_src = ENV.fetch('ADDITIONAL_CONNECT_SRC') { '' }.split(/\s*,\s*/)
 
 Rails.application.configure do
   https = Rails.env.production? || ENV['LOCAL_HTTPS'] == 'true'
@@ -16,6 +17,7 @@ Rails.application.configure do
   config.x.use_swift    = ENV['SWIFT_ENABLED'] == 'true'
 
   config.x.alternate_domains = alternate_domains
+  config.x.additional_connect_src = additional_connect_src
 
   config.action_mailer.default_url_options = { host: web_host, protocol: https ? 'https://' : 'http://', trailing_slash: false }
 

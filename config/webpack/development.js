@@ -38,7 +38,7 @@ module.exports = merge(sharedConfig, {
     contentBase: output.path,
     inline: settings.dev_server.inline,
     useLocalIp: settings.dev_server.use_local_ip,
-    public: settings.dev_server.public,
+    public: process.env.WEBPACKER_DEV_SERVER_PUBLIC || settings.dev_server.public,
     publicPath: output.publicPath,
     historyApiFallback: {
       disableDotRule: true,

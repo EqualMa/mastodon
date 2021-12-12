@@ -1,2 +1,14 @@
 image:
   file: .gitpod.Dockerfile
+ports:
+  - port: 3000
+  - port: 3035
+  - port: 4000
+tasks:
+  - before: >
+      rvm install "ruby-$(cat .ruby-version)"
+      && ruby --version
+      && gem install foreman --no-document
+    init: bundle install && yarn install
+  - name: Start Redis
+    command: redis-server
