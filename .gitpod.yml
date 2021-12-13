@@ -5,6 +5,7 @@ ports:
   - port: 3035
   - port: 4000
 tasks:
-  - init: bundle install && yarn install
+  - before: gem install foreman --no-document
+    init: bundle install && yarn install
   - name: Start Redis
     command: redis-server
