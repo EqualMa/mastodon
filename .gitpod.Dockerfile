@@ -10,6 +10,8 @@ RUN sudo apt-get update \
         libidn11-dev libicu-dev libjemalloc-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
+USER gitpod
+
 RUN printf "\n# Auto-set mastodon env vars.\n" >> ~/.bashrc && \
     echo 'export RAILS_ENV=development'  >> ~/.bashrc && \
     echo 'export LOCAL_HTTPS=true'  >> ~/.bashrc && \
@@ -20,6 +22,10 @@ RUN printf "\n# Auto-set mastodon env vars.\n" >> ~/.bashrc && \
     echo 'export ADDITIONAL_CONNECT_SRC="https://$MASTODON_WDS_DOMAIN,wss://$MASTODON_WDS_DOMAIN"' >> ~/.bashrc && \
     printf "# Auto-set mastodon env vars end.\n" >> ~/.bashrc
 
+# Install Ruby and set it as default
+# https://www.gitpod.io/docs/languages/ruby
+RUN echo "rvm_gems_path=/home/gitpod/.rvm" > ~/.rvmrc
 COPY .ruby-version /tmp/.ruby-version-mastodon-docker
-RUN rvm install "ruby-$(cat /tmp/.ruby-version-mastodon-docker)" && \
-    gem install foreman --no-document
+RUN bash -lc 'rvm install "ruby-$(cat /tmp/.ruby-version-mastodon-docker)" && rvm use "ruby-ruby-$(cat /tmp/.ruby-version-mastodon-docker)" --default'
+RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
+RUN gem install foreman --no-document
