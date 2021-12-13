@@ -19,3 +19,7 @@ RUN printf "\n# Auto-set mastodon env vars.\n" >> ~/.bashrc && \
     echo 'export WEBPACKER_DEV_SERVER_PUBLIC="wss://$MASTODON_WDS_DOMAIN"' >> ~/.bashrc && \
     echo 'export ADDITIONAL_CONNECT_SRC="https://$MASTODON_WDS_DOMAIN,wss://$MASTODON_WDS_DOMAIN"' >> ~/.bashrc && \
     printf "# Auto-set mastodon env vars end.\n" >> ~/.bashrc
+
+COPY .ruby-version /tmp/.ruby-version-mastodon-docker
+RUN rvm install "ruby-$(cat /tmp/.ruby-version-mastodon-docker)" && \
+    gem install foreman --no-document
