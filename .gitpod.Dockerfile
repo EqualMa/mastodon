@@ -28,5 +28,7 @@ RUN echo "rvm_gems_path=/home/gitpod/.rvm" > ~/.rvmrc
 COPY .ruby-version /tmp/.ruby-version-mastodon-docker
 RUN bash -lc 'rvm install "ruby-$(cat /tmp/.ruby-version-mastodon-docker)" && rvm use "ruby-ruby-$(cat /tmp/.ruby-version-mastodon-docker)" --default'
 RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
+RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc && \
+    echo "rvm_silence_path_mismatch_check_flag=1" >> ~/.rvmrc && \
+    echo "rvm use ruby-ruby-$(cat /tmp/.ruby-version-mastodon-docker)" >> ~/.bashrc
 RUN bash -lc 'gem install foreman --no-document'
-RUN echo "rvm use ruby-ruby-$(cat /tmp/.ruby-version-mastodon-docker)" >> ~/.bashrc
