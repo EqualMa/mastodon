@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   COMPOSE_MOUNT,
   COMPOSE_UNMOUNT,
@@ -39,11 +40,12 @@ import {
   COMPOSE_POLL_OPTION_CHANGE,
   COMPOSE_POLL_OPTION_REMOVE,
   COMPOSE_POLL_SETTINGS_CHANGE,
+  COMPOSE_MARKDOWN_CHANGE,
 } from '../actions/compose';
 import { TIMELINE_DELETE } from '../actions/timelines';
 import { STORE_HYDRATE } from '../actions/store';
 import { REDRAFT } from '../actions/statuses';
-import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrderedSet, fromJS } from 'immutable';
+import { Map as ImmutableMap, List as ImmutableList, OrderedSet as ImmutableOrderedSet, fromJS, Record } from 'immutable';
 import uuid from '../uuid';
 import { me } from '../initial_state';
 import { unescapeHTML } from '../utils/html';
@@ -76,6 +78,25 @@ const initialState = ImmutableMap({
   resetFileKey: Math.floor((Math.random() * 0x10000)),
   idempotencyKey: null,
   tagHistory: ImmutableList(),
+  /**
+   * When set to `null`, markdown is disabled.
+   *
+   * When set to a {@link MarkdownRecord}, markdown is enabled.
+   */
+  markdown: null,
+});
+
+export const MarkdownRecord = Record({
+  /**
+   * `editorRef?.current?.getMarkdown()` returns the markdown;
+   *
+   * `editorRef?.current?.getHTML()` returns the parsed html;
+   *
+   * If the editor instance is not available yet,
+   * the above methods will return `undefined`.
+   */
+  editorRef: null,
+  initialMarkdown: '',
 });
 
 const initialPoll = ImmutableMap({
@@ -436,6 +457,32 @@ export default function compose(state = initialState, action) {
     return state.updateIn(['poll', 'options'], options => options.delete(action.index));
   case COMPOSE_POLL_SETTINGS_CHANGE:
     return state.update('poll', poll => poll.set('expires_in', action.expiresIn).set('multiple', action.isMultiple));
+  case COMPOSE_MARKDOWN_CHANGE:
+    return state.withMutations(map => {
+      const value = action.value;
+
+      if (value) {
+        const editorRef = React.createRef();
+        const initialMarkdown = map.get('text');
+        const md = new MarkdownRecord({
+          editorRef,
+          initialMarkdown,
+        });
+
+        map.set('markdown', md);
+        map.set('is_composing', true);
+      } else {
+        // before disabling markdown, store the text.
+        const old = map.get('markdown');
+        const editorIns = old?.get('editorRef')?.current;
+        const text = editorIns?.getMarkdown();
+        if (text) {
+          map.set('text', text);
+        }
+        map.set('markdown', null);
+        map.set('is_composing', false);
+      }
+    });
   default:
     return state;
   }

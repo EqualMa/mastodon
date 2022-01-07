@@ -1,0 +1,129 @@
+/**
+* refactored from https://github.com/nhn/tui.editor/blob/e91b9500ed2631d0a8d371e95ebf10662b19aa83/apps/editor/src/css/contents.css
+*/
+
+/* 
+  z-index basis
+  -1: pseudo element
+  20 - preview, wysiwyg
+  30 - wysiwyg code block language editor, popup, context menu
+  40 - tooltip
+*/
+.ProseMirror {
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial',
+    '나눔바른고딕', 'Nanum Barun Gothic', '맑은고딕', 'Malgun Gothic',
+    sans-serif;
+  color: #222;
+  font-size: 13px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100% - 36px);
+}
+
+.ProseMirror .placeholder {
+  color: #999;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror-selectednode {
+  outline: none;
+}
+
+table.ProseMirror-selectednode {
+  border-radius: 2px;
+  outline: 2px solid #00a9ff;
+}
+
+.html-block.ProseMirror-selectednode {
+  border-radius: 2px;
+  outline: 2px solid #00a9ff;
+}
+
+.toastui-editor-contents {
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial',
+    '나눔바른고딕', 'Nanum Barun Gothic', '맑은고딕', 'Malgun Gothic',
+    sans-serif;
+  z-index: 20;
+}
+
+.toastui-editor-custom-block .toastui-editor-custom-block-editor {
+  background: #f9f7fd;
+  color: #452d6b;
+  border: solid 1px #dbd4ea;
+}
+
+.toastui-editor-custom-block .toastui-editor-custom-block-view {
+  position: relative;
+  padding: 9px 13px 8px 12px;
+}
+
+.toastui-editor-custom-block.ProseMirror-selectednode
+  .toastui-editor-custom-block-view {
+  border: solid 1px #dbd4ea;
+  border-radius: 2px;
+}
+
+.toastui-editor-custom-block .toastui-editor-custom-block-view .tool {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  display: none;
+}
+
+.toastui-editor-custom-block.ProseMirror-selectednode
+  .toastui-editor-custom-block-view
+  .tool {
+  display: block;
+}
+
+.toastui-editor-custom-block-view button {
+  vertical-align: middle;
+  width: 15px;
+  height: 15px;
+  margin-left: 8px;
+  padding: 3px;
+  border: solid 1px #cccccc;
+  background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI1LjIuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IuugiOydtOyWtF8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiCgkgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMzAgMzAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMwIDMwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGwtcnVsZTpldmVub2RkO2NsaXAtcnVsZTpldmVub2RkO2ZpbGw6IzU1NTU1NTt9Cjwvc3R5bGU+CjxnPgoJPGc+CgkJPGc+CgkJCTxnPgoJCQkJPGc+CgkJCQkJPHBhdGggY2xhc3M9InN0MCIgZD0iTTE1LjUsMTIuNWwyLDJMMTIsMjBoLTJ2LTJMMTUuNSwxMi41eiBNMTgsMTBsMiwybC0xLjUsMS41bC0yLTJMMTgsMTB6Ii8+CgkJCQk8L2c+CgkJCTwvZz4KCQk8L2c+Cgk8L2c+CjwvZz4KPC9zdmc+Cg==')
+    no-repeat;
+  background-position: center;
+  background-size: 30px 30px;
+}
+
+.toastui-editor-custom-block-view .info {
+  font-size: 13px;
+  font-weight: bold;
+  color: #5200d0;
+  vertical-align: middle;
+}
+
+.toastui-editor-md-preview .toastui-editor-contents h1 {
+  min-height: 28px;
+}
+
+.toastui-editor-md-preview .toastui-editor-contents h2 {
+  min-height: 23px;
+}
+
+.toastui-editor-md-preview .toastui-editor-contents blockquote {
+  min-height: 20px;
+}
+
+.toastui-editor-md-preview .toastui-editor-contents li {
+  min-height: 22px;
+}
+
+.toastui-editor-pseudo-clipboard {
+  position: fixed;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  left: -1000px;
+  top: -1000px;
+  z-index: -1;
+}

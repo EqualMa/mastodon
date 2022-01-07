@@ -12,6 +12,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import SpoilerButtonContainer from '../containers/spoiler_button_container';
 import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
 import EmojiPickerDropdown from '../containers/emoji_picker_dropdown_container';
+import MarkdownButtonContainer from '../../markdown/button_container';
 import PollFormContainer from '../containers/poll_form_container';
 import UploadFormContainer from '../containers/upload_form_container';
 import WarningContainer from '../containers/warning_container';
@@ -199,13 +200,10 @@ class ComposeForm extends ImmutablePureComponent {
   render () {
     const { intl, onPaste, showSearch } = this.props;
     const disabled = this.props.isSubmitting;
-    let publishText = '';
-
-    if (this.props.privacy === 'private' || this.props.privacy === 'direct') {
-      publishText = <span className='compose-form__publish-private'><Icon id='lock' /> {intl.formatMessage(messages.publish)}</span>;
-    } else {
-      publishText = this.props.privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
-    }
+    const publishText = getPublishText({
+      intl,
+      privacy:this.props.privacy,
+    });
 
     return (
       <div className='compose-form'>
@@ -259,6 +257,7 @@ class ComposeForm extends ImmutablePureComponent {
             <PollButtonContainer />
             <PrivacyDropdownContainer />
             <SpoilerButtonContainer />
+            <MarkdownButtonContainer />
           </div>
           <div className='character-counter__wrapper'><CharacterCounter max={MAX_CHARS} text={this.getFulltextForCharacterCounting()} /></div>
         </div>
@@ -270,4 +269,15 @@ class ComposeForm extends ImmutablePureComponent {
     );
   }
 
+}
+
+export function getPublishText({
+  intl,
+  privacy,
+}) {
+  if (privacy === 'private' || privacy === 'direct') {
+    return <span className='compose-form__publish-private'><Icon id='lock' /> {intl.formatMessage(messages.publish)}</span>;
+  } else {
+    return privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
+  }
 }

@@ -9,7 +9,7 @@ export default class IconButton extends React.PureComponent {
   static propTypes = {
     className: PropTypes.string,
     title: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired,
+    icon: PropTypes.node.isRequired,
     onClick: PropTypes.func,
     onMouseDown: PropTypes.func,
     onKeyDown: PropTypes.func,
@@ -138,7 +138,12 @@ export default class IconButton extends React.PureComponent {
         tabIndex={tabIndex}
         disabled={disabled}
       >
-        <Icon id={icon} fixedWidth aria-hidden='true' /> {typeof counter !== 'undefined' && <span className='icon-button__counter'><AnimatedNumber value={counter} obfuscate={obfuscateCount} /></span>}
+        {typeof icon === 'string' ? (
+          <Icon id={icon} fixedWidth aria-hidden='true' />
+        ) : (
+          icon
+        )}
+        {typeof counter !== 'undefined' && <span className='icon-button__counter'><AnimatedNumber value={counter} obfuscate={obfuscateCount} /></span>}
       </button>
     );
   }

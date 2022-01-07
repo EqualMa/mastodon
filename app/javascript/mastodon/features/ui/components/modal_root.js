@@ -40,9 +40,13 @@ const MODAL_COMPONENTS = {
 export default class ModalRoot extends React.PureComponent {
 
   static propTypes = {
-    type: PropTypes.string,
+    type: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.func,
+    ]),
     props: PropTypes.object,
     onClose: PropTypes.func.isRequired,
+    className: PropTypes.string,
   };
 
   state = {
@@ -78,14 +82,18 @@ export default class ModalRoot extends React.PureComponent {
   }
 
   render () {
-    const { type, props, onClose } = this.props;
+    const { type, props, onClose, className } = this.props;
     const { backgroundColor } = this.state;
     const visible = !!type;
 
+    const fetchComponent = typeof type === 'string'
+      ? MODAL_COMPONENTS[type]
+      : type;
+
     return (
-      <Base backgroundColor={backgroundColor} onClose={onClose}>
+      <Base backgroundColor={backgroundColor} onClose={onClose} className={className}>
         {visible && (
-          <BundleContainer fetchComponent={MODAL_COMPONENTS[type]} loading={this.renderLoading(type)} error={this.renderError} renderDelay={200}>
+          <BundleContainer fetchComponent={fetchComponent} loading={this.renderLoading(type)} error={this.renderError} renderDelay={200}>
             {(SpecificComponent) => <SpecificComponent {...props} onChangeBackgroundColor={this.setBackgroundColor} onClose={onClose} />}
           </BundleContainer>
         )}

@@ -5,7 +5,13 @@ import { Stack as ImmutableStack, Map as ImmutableMap } from 'immutable';
 export default function modal(state = ImmutableStack(), action) {
   switch(action.type) {
   case MODAL_OPEN:
-        return state.unshift(ImmutableMap({ modalType: action.modalType, modalProps: action.modalProps }));
+    return state.unshift(
+      ImmutableMap({
+        modalType: action.modalType,
+        modalProps: action.modalProps,
+        modalRootProps: action.modalRootProps,
+      }),
+    );
   case MODAL_CLOSE:
     return (action.modalType === undefined || action.modalType === state.getIn([0, 'modalType'])) ? state.shift() : state;
   case TIMELINE_DELETE:

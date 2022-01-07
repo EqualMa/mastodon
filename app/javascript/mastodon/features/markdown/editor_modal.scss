@@ -1,0 +1,112 @@
+@import '../../../styles/mastodon/variables.scss';
+
+.markdown-editor-modal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  &-root.modal-root {
+    &,
+    .modal-root__container,
+    .modal-root__modal {
+      z-index: 2;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    /* Small devices (tablets, 768px and up) */
+    @media (min-width: 768px) {
+      border-radius: 4px;
+
+      top: 16px;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+    }
+
+    /* Medium devices (desktops, 992px and up) */
+    @media (min-width: 992px) {
+      top: 32px;
+      bottom: 32px;
+      left: 32px;
+      right: 32px;
+    }
+
+    /* Large devices (large desktops, 1200px and up) */
+    @media (min-width: 1200px) {
+      top: 48px;
+      bottom: 48px;
+      left: 48px;
+      right: 48px;
+    }
+  }
+
+  $toolbar-height: 56px;
+
+  &__toolbar {
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    height: $toolbar-height;
+    width: 100%;
+    padding: 10px;
+
+    background: darken($simple-background-color, 8%);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__buttons {
+      display: flex;
+      > * {
+        margin-right: 4px;
+      }
+    }
+
+    &__publish-area {
+      display: flex;
+      align-items: center;
+
+      > * {
+        margin-left: 4px;
+      }
+    }
+  }
+
+  &__editor-container {
+    position: absolute;
+    top: $toolbar-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    color: #333;
+
+    > * {
+      height: 100%;
+      width: 100%;
+    }
+
+    .toastui-editor-main {
+      background-color: white;
+    }
+
+    .toastui-editor-defaultUI {
+      border: none;
+    }
+
+    .toastui-editor-defaultUI-toolbar,
+    .toastui-editor-mode-switch {
+      border-radius: 0;
+    }
+  }
+}

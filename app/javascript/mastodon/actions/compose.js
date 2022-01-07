@@ -63,6 +63,8 @@ export const COMPOSE_POLL_OPTION_CHANGE   = 'COMPOSE_POLL_OPTION_CHANGE';
 export const COMPOSE_POLL_OPTION_REMOVE   = 'COMPOSE_POLL_OPTION_REMOVE';
 export const COMPOSE_POLL_SETTINGS_CHANGE = 'COMPOSE_POLL_SETTINGS_CHANGE';
 
+export const COMPOSE_MARKDOWN_CHANGE = 'COMPOSE_MARKDOWN_CHANGE';
+
 const messages = defineMessages({
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   uploadErrorPoll:  { id: 'upload_error.poll', defaultMessage: 'File upload not allowed with polls.' },
@@ -130,7 +132,19 @@ export function directCompose(account, routerHistory) {
 
 export function submitCompose(routerHistory) {
   return function (dispatch, getState) {
-    const status = getState().getIn(['compose', 'text'], '');
+    const md = getState().getIn(['compose', 'markdown']);
+
+    let status;
+    let contentType = undefined;
+
+    if (md) {
+      const html = md.editorRef?.current?.getHTML();
+      if (html === undefined) return; // editor not initialized yet. should prevent submitting
+      status = html;
+      contentType = 'text/html';
+    } else {
+      status = getState().getIn(['compose', 'text'], '');
+    }
     const media  = getState().getIn(['compose', 'media_attachments']);
 
     if ((!status || !status.length) && media.size === 0) {
@@ -147,11 +161,14 @@ export function submitCompose(routerHistory) {
       spoiler_text: getState().getIn(['compose', 'spoiler']) ? getState().getIn(['compose', 'spoiler_text'], '') : '',
       visibility: getState().getIn(['compose', 'privacy']),
       poll: getState().getIn(['compose', 'poll'], null),
+      content_type: contentType,
     }, {
       headers: {
         'Idempotency-Key': getState().getIn(['compose', 'idempotencyKey']),
       },
     }).then(function (response) {
+      dispatch(changeMarkdown(false));
+
       if (routerHistory && routerHistory.location.pathname === '/statuses/new' && window.history.state) {
         routerHistory.goBack();
       }
@@ -649,3 +666,14 @@ export function changePollSettings(expiresIn, isMultiple) {
     isMultiple,
   };
 };
+
+/**
+ *
+ * @param {boolean} enabled
+ */
+export function changeMarkdown(enabled) {
+  return {
+    type: COMPOSE_MARKDOWN_CHANGE,
+    value: enabled,
+  };
+}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import 'wicg-inert';
 import { createBrowserHistory } from 'history';
 import { multiply } from 'color-blend';
+import classNames from 'classnames';
 
 export default class ModalRoot extends React.PureComponent {
 
@@ -12,6 +13,7 @@ export default class ModalRoot extends React.PureComponent {
 
   static propTypes = {
     children: PropTypes.node,
+    className: PropTypes.string,
     onClose: PropTypes.func.isRequired,
     backgroundColor: PropTypes.shape({
       r: PropTypes.number,
@@ -126,12 +128,14 @@ export default class ModalRoot extends React.PureComponent {
   }
 
   render () {
-    const { children, onClose } = this.props;
+    const { children, onClose, className } = this.props;
     const visible = !!children;
+
+    const classes = classNames(className, 'modal-root');
 
     if (!visible) {
       return (
-        <div className='modal-root' ref={this.setRef} style={{ opacity: 0 }} />
+        <div className={classes} ref={this.setRef} style={{ opacity: 0 }} />
       );
     }
 
@@ -142,7 +146,7 @@ export default class ModalRoot extends React.PureComponent {
     }
 
     return (
-      <div className='modal-root' ref={this.setRef}>
+      <div className={classes} ref={this.setRef}>
         <div style={{ pointerEvents: visible ? 'auto' : 'none' }}>
           <div role='presentation' className='modal-root__overlay' onClick={onClose} style={{ backgroundColor: backgroundColor ? `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, 0.7)` : null }} />
           <div role='dialog' className='modal-root__container'>{children}</div>

@@ -4800,7 +4800,7 @@ a.status-card.compact:hover {
   max-height: 420px;
   position: relative;
 
-  & > div {
+  & > div:not(.loading-indicator) {
     position: absolute;
     top: 0;
     left: 0;
