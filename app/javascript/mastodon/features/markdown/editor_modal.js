@@ -8,7 +8,7 @@ import CharacterCounter from '../../features/compose/components/character_counte
 import MarkdownButtonContainer from './button_container';
 
 import './editor_modal.scss';
-// import 'prosemirror-view/style/prosemirror.css';
+import 'prosemirror-view/style/prosemirror.css';
 import '@toast-ui/editor/dist/toastui-editor-only.css';
 import './editor_viewer.scss';
 

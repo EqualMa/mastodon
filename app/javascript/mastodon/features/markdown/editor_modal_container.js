@@ -8,6 +8,9 @@ import ModalRoot from '../ui/components/modal_root';
 import { getPublishText } from '../compose/components/compose_form';
 import { changeMarkdown, submitCompose } from '../../actions/compose';
 import { withRouter } from 'react-router-dom';
+import initialState from '../../initial_state';
+
+const MAX_CHARS = initialState.max_toot_chars || 500;
 
 const EditorModal = () =>
   import(
@@ -39,7 +42,7 @@ function selector(state) {
 }
 
 function useEditorModal({ intl, history }) {
-  const max = 500;
+  const max = MAX_CHARS;
   const {
     compose: {
       privacy,
