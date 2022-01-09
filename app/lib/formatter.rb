@@ -43,9 +43,8 @@ class Formatter
       html = encode_and_link_urls(html, linkable_accounts)
       html = encode_custom_emojis(html, status.emojis, options[:autoplay]) if options[:custom_emojify]
       html = simple_format(html, {}, sanitize: false)
+      html = html.delete("\n")
     end
-
-    html = html.delete("\n")
 
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
